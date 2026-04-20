@@ -89,6 +89,11 @@ export default function AdminPanel() {
     else document.body.classList.remove('admin-mode');
   }, [isAdmin]);
 
+  useEffect(() => {
+    if (isCmsOpen) document.body.classList.add('cms-open');
+    else document.body.classList.remove('cms-open');
+  }, [isCmsOpen]);
+
   const loadProjects = () => {
     const saved = localStorage.getItem('portfolio_projects');
     if (saved) setProjects(JSON.parse(saved));
@@ -297,9 +302,9 @@ export default function AdminPanel() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 200 }}
-              className="cms-sidebar fixed right-0 top-0 h-screen w-full lg:w-[600px] z-[3000] bg-[#0A0A0A] border-l border-burgundy flex flex-col p-12 overflow-y-auto"
+              className="cms-sidebar fixed right-0 top-0 h-screen w-full lg:w-[600px] z-[3000] bg-[#0A0A0A] border-l border-burgundy flex flex-col p-6 sm:p-12 overflow-y-auto"
             >
-              <div className="flex justify-between items-start mb-20">
+              <div className="flex justify-between items-start mb-12 sm:mb-20">
                 <div>
                   <h2 className="text-3xl font-serif text-white italic">PORTFOLIO MANAGEMENT</h2>
                   <p className="text-[11px] font-sans text-white/40 tracking-wider">Curation Panel v1.0.4</p>
@@ -406,7 +411,7 @@ export default function AdminPanel() {
                        />
                      </div>
 
-                     <div className="grid grid-cols-2 gap-10">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                        <div className="space-y-4">
                          <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Room Category *</label>
                          <select 
@@ -453,7 +458,7 @@ export default function AdminPanel() {
                            <p className="text-[11px] text-white/30 uppercase tracking-[2px]">Assign high-resolution perspective shots</p>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                            {[
                              { id: 'cover', label: 'Primary Cover Image' },
                              { id: 'detail1', label: 'Perspective Detail I' },
@@ -515,7 +520,7 @@ export default function AdminPanel() {
                         </div>
                      </div>
 
-                     <div className="grid grid-cols-3 gap-6 pt-10">
+                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10">
                         <div className="space-y-4">
                            <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Style Preference</label>
                            <input name="style" defaultValue={editingProject?.style} className="w-full bg-transparent border-b border-white/10 py-4 text-white outline-none focus:border-burgundy" placeholder="Japandi, etc." />
@@ -531,11 +536,11 @@ export default function AdminPanel() {
                      </div>
                    </div>
 
-                   <div className="pt-16 flex gap-6 sticky bottom-0 bg-[#0A0A0A] py-6 z-10 border-t border-white/5">
+                   <div className="pt-16 flex flex-col sm:flex-row gap-6 sticky bottom-0 bg-[#0A0A0A] py-6 z-10 border-t border-white/5">
                      <button type="submit" className="flex-1 bg-burgundy text-white py-6 uppercase text-[13px] font-bold tracking-[4px] hover:bg-white hover:text-stone-900 transition-all cursor-pointer shadow-2xl">
                        ✦ {editingProject ? 'UPDATE CURATE ENTRY' : 'COMMIT TO ARCHIVE'}
                      </button>
-                     <button type="button" onClick={() => { setActiveTab('all'); setEditingProject(null); }} className="px-10 border border-white/10 text-white/30 uppercase text-[10px] font-bold tracking-[2px] cursor-pointer hover:text-white transition-colors">Discard</button>
+                     <button type="button" onClick={() => { setActiveTab('all'); setEditingProject(null); }} className="px-10 py-4 border border-white/10 text-white/30 uppercase text-[10px] font-bold tracking-[2px] cursor-pointer hover:text-white transition-colors">Discard</button>
                    </div>
                 </form>
               )}

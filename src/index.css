@@ -77,6 +77,14 @@ body.admin-mode .cms-sidebar {
   height: calc(100vh - 60px);
 }
 
+body.cms-open nav {
+  display: none !important;
+}
+
+body.cms-open #admin-trigger {
+  display: none !important;
+}
+
 /* Mobile responsive fixes for admin mode */
 @media (max-width: 640px) {
   body.admin-mode {
