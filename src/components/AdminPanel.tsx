@@ -135,15 +135,20 @@ export default function AdminPanel() {
       id: editingProject?.id || Date.now(),
       title: data.title as string,
       roomType: data.roomType as string,
-      style: data.style as string,
+      style: (data.style as string) || 'Contemporary',
       city: data.city as string,
-      completionTime: data.completionTime as string,
-      budgetRange: data.budgetRange as string,
+      completionTime: (data.completionTime as string) || '4-6 Weeks',
+      budgetRange: (data.budgetRange as string) || 'Premium',
       description: data.description as string,
       categoryLabel: (data.categoryLabel as string) || (data.roomType as string).toUpperCase(),
       status: (data.status as any) || 'published',
       displayOrder: parseInt(data.displayOrder as string) || 1,
-      images: editingProject?.images || { cover: '', detail1: '', detail2: '', detail3: '' },
+      images: {
+        cover: (data.img_cover as string) || editingProject?.images.cover || '',
+        detail1: (data.img_detail1 as string) || editingProject?.images.detail1 || '',
+        detail2: (data.img_detail2 as string) || editingProject?.images.detail2 || '',
+        detail3: (data.img_detail3 as string) || editingProject?.images.detail3 || '',
+      },
       createdAt: editingProject?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -332,13 +337,13 @@ export default function AdminPanel() {
                           >
                             <span className="text-white text-[13px]">Confirm Delete '{project.title}'?</span>
                             <div className="flex gap-4">
-                              <button onClick={() => deleteProject(project.id)} className="bg-burgundy px-4 py-2 text-[10px] uppercase tracking-widest font-bold">Delete</button>
-                              <button onClick={() => setDeleteConfirm(null)} className="border border-white/20 px-4 py-2 text-[10px] uppercase tracking-widest font-bold">Cancel</button>
+                              <button onClick={() => deleteProject(project.id)} className="bg-burgundy px-4 py-2 text-[10px] uppercase tracking-widest font-bold cursor-pointer">Delete</button>
+                              <button onClick={() => setDeleteConfirm(null)} className="border border-white/20 px-4 py-2 text-[10px] uppercase tracking-widest font-bold cursor-pointer">Cancel</button>
                             </div>
                           </motion.div>
                         ) : (
                           <div className="grid grid-cols-[80px_1fr_auto] gap-8 bg-white/[0.04] border border-white/[0.08] p-6 rounded-sm items-center hover:border-burgundy transition-all">
-                            <div className="w-20 h-16 bg-[#1a0a0a] rounded-sm overflow-hidden">
+                            <div className="w-20 h-16 bg-[#1a0a0a] rounded-sm overflow-hidden flex items-center justify-center">
                               {project.images.cover ? (
                                 <img src={project.images.cover} className="w-full h-full object-cover" />
                               ) : (
@@ -357,13 +362,13 @@ export default function AdminPanel() {
                             <div className="flex gap-2">
                                 <button 
                                   onClick={() => { setEditingProject(project); setActiveTab('form'); }}
-                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all"
+                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all cursor-pointer"
                                 >
                                   Edit
                                 </button>
                                 <button 
                                   onClick={() => setDeleteConfirm(project.id)}
-                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all"
+                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all cursor-pointer"
                                 >
                                   🗑
                                 </button>
@@ -375,7 +380,7 @@ export default function AdminPanel() {
                   ) : (
                     <div className="text-center py-20">
                       <p className="text-white/40 text-[13px] uppercase tracking-[2px]">No curated works recorded.</p>
-                      <button onClick={() => setActiveTab('form')} className="mt-4 text-burgundy font-bold text-[13px]">+ CREATE RECORD →</button>
+                      <button onClick={() => setActiveTab('form')} className="mt-4 text-burgundy font-bold text-[13px] cursor-pointer">+ CREATE RECORD →</button>
                     </div>
                   )}
                 </div>
@@ -389,6 +394,7 @@ export default function AdminPanel() {
                          defaultValue={editingProject?.title}
                          required 
                          className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                         placeholder="e.g. The Ethereal Twilight Lounge"
                        />
                      </div>
 
@@ -398,13 +404,15 @@ export default function AdminPanel() {
                          <select 
                            name="roomType"
                            defaultValue={editingProject?.roomType || 'Living Room'}
-                           className="w-full bg-[#0A0A0A] border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                           className="w-full bg-[#0A0A0A] border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy cursor-pointer"
                          >
                            <option>Living Room</option>
                            <option>Master Bedroom</option>
-                           <option>Gourment Kitchen</option>
-                           <option>Full Home Remodel</option>
-                           <option>Commercial Space</option>
+                           <option>Kids Room</option>
+                           <option>Gourmet Kitchen</option>
+                           <option>Balcony & Outdoors</option>
+                           <option>Home Office</option>
+                           <option>Full Home Makeover</option>
                          </select>
                        </div>
                        <div className="space-y-4">
@@ -413,6 +421,53 @@ export default function AdminPanel() {
                            name="city" 
                            defaultValue={editingProject?.city}
                            required 
+                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                           placeholder="e.g. Mumbai, Bengaluru"
+                         />
+                       </div>
+                     </div>
+
+                     <div className="grid grid-cols-2 gap-10">
+                       <div className="space-y-4">
+                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Design Style</label>
+                         <input 
+                           name="style" 
+                           defaultValue={editingProject?.style}
+                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                           placeholder="e.g. Japandi, Modern Classy"
+                         />
+                       </div>
+                       <div className="space-y-4">
+                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Completion Time</label>
+                         <input 
+                           name="completionTime" 
+                           defaultValue={editingProject?.completionTime}
+                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                           placeholder="e.g. 60 Days"
+                         />
+                       </div>
+                     </div>
+
+                     <div className="grid grid-cols-2 gap-10">
+                       <div className="space-y-4">
+                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Budget Range</label>
+                         <select 
+                           name="budgetRange"
+                           defaultValue={editingProject?.budgetRange || 'Premium'}
+                           className="w-full bg-[#0A0A0A] border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy cursor-pointer"
+                         >
+                            <option>Under ₹5L</option>
+                            <option>₹5L – ₹15L</option>
+                            <option>Above ₹15L</option>
+                            <option>Premium Curation</option>
+                         </select>
+                       </div>
+                       <div className="space-y-4">
+                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Display Order</label>
+                         <input 
+                           type="number"
+                           name="displayOrder" 
+                           defaultValue={editingProject?.displayOrder || 1}
                            className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
                          />
                        </div>
@@ -426,13 +481,58 @@ export default function AdminPanel() {
                          required 
                          rows={4}
                          className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy resize-none"
+                         placeholder="The story behind this design..."
                        />
+                     </div>
+
+                     <div className="space-y-8 border-t border-white/10 pt-10">
+                        <h4 className="text-white text-[15px] italic font-serif">Visual Assets (Image URLs)</h4>
+                        
+                        <div className="grid grid-cols-2 gap-10">
+                           <div className="space-y-4">
+                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Cover Image URL</label>
+                             <input 
+                               name="img_cover" 
+                               defaultValue={editingProject?.images.cover}
+                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
+                             />
+                           </div>
+                           <div className="space-y-4">
+                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 1 URL</label>
+                             <input 
+                               name="img_detail1" 
+                               defaultValue={editingProject?.images.detail1}
+                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
+                             />
+                           </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-10">
+                           <div className="space-y-4">
+                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 2 URL</label>
+                             <input 
+                               name="img_detail2" 
+                               defaultValue={editingProject?.images.detail2}
+                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
+                             />
+                           </div>
+                           <div className="space-y-4">
+                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 3 URL</label>
+                             <input 
+                               name="img_detail3" 
+                               defaultValue={editingProject?.images.detail3}
+                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
+                             />
+                           </div>
+                        </div>
+
+                        <p className="text-[10px] text-white/20 italic">✦ Pro Tip: You can also update images by clicking on them directly in the Portfolio page while in Admin Mode.</p>
                      </div>
                    </div>
 
                    <div className="pt-10 flex gap-6">
-                     <button type="submit" className="flex-1 bg-burgundy text-white py-5 uppercase text-[12px] font-bold tracking-[3px] hover:bg-white hover:text-stone-900 transition-all">✦ COMMIT CHANGES</button>
-                     <button type="button" onClick={() => setActiveTab('all')} className="px-10 border border-white/20 text-white/40 uppercase text-[10px] font-bold tracking-[2px]">Discard</button>
+                     <button type="submit" className="flex-1 bg-burgundy text-white py-5 uppercase text-[12px] font-bold tracking-[3px] hover:bg-white hover:text-stone-900 transition-all cursor-pointer">✦ COMMIT CHANGES</button>
+                     <button type="button" onClick={() => setActiveTab('all')} className="px-10 border border-white/20 text-white/40 uppercase text-[10px] font-bold tracking-[2px] cursor-pointer">Discard</button>
                    </div>
                 </form>
               )}

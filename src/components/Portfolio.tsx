@@ -189,6 +189,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, idx, isAdmin, onEdit
             </div>
           </div>
 
+          <div className="flex gap-10 opacity-40">
+            <div>
+              <div className="text-[7px] uppercase font-bold tracking-[2px] mb-1">STYLE</div>
+              <div className="text-[12px] font-sans">{project.style}</div>
+            </div>
+            <div>
+              <div className="text-[7px] uppercase font-bold tracking-[2px] mb-1">INVESTMENT</div>
+              <div className="text-[12px] font-sans">{project.budgetRange}</div>
+            </div>
+          </div>
+
           <a 
             href="#contact" 
             className="glass p-1.5 rounded-full flex items-center pr-8 gap-5 cursor-pointer w-fit group hover:bg-stone-900 hover:text-white transition-all duration-500"
