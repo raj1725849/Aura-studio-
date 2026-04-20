@@ -56,6 +56,49 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Admin Mode Layout Fixes */
+body.admin-mode {
+  padding-top: 60px;
+}
+
+body.admin-mode nav {
+  top: 60px !important;
+}
+
+/* Ensure mobile menu starts below admin bar */
+body.admin-mode nav > div:last-child {
+  top: 60px;
+  height: calc(100vh - 60px);
+}
+
+/* Ensure CMS Sidebar starts below admin bar or stays full height if desired */
+body.admin-mode .cms-sidebar {
+  top: 60px;
+  height: calc(100vh - 60px);
+}
+
+/* Mobile responsive fixes for admin mode */
+@media (max-width: 640px) {
+  body.admin-mode {
+    padding-top: 50px;
+  }
+  
+  body.admin-mode .fixed.top-0.h-\[60px\] {
+    height: 50px !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  body.admin-mode nav {
+    top: 50px !important;
+  }
+
+  body.admin-mode nav > div:last-child {
+    top: 50px;
+    height: calc(100vh - 50px);
+  }
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

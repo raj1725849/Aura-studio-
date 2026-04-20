@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Instagram, Linkedin, Pin as Pinterest, ExternalLink } from 'lucide-react';
+import { Instagram, Linkedin, Pin as Pinterest, ExternalLink, Settings } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -100,9 +100,9 @@ export default function Footer() {
                 const trigger = document.querySelector('#admin-trigger button') as HTMLButtonElement;
                 if(trigger) trigger.click();
               }}
-              className="text-[10px] font-bold tracking-[0.3em] text-stone-800/30 uppercase font-sans hover:text-stone-900 transition-colors"
+              className="text-[10px] font-bold tracking-[0.3em] text-stone-800/50 uppercase font-sans hover:text-burgundy transition-colors flex items-center gap-2 cursor-pointer"
             >
-              Admin
+              <Settings size={10} /> Curator Portal
             </button>
             <a href="#" className="text-[10px] font-bold tracking-[0.3em] text-stone-800/30 uppercase font-sans hover:text-stone-900 transition-colors">Privacy Philosophy</a>
             <a href="#" className="text-[10px] font-bold tracking-[0.3em] text-stone-800/30 uppercase font-sans hover:text-stone-900 transition-colors">Terms of Dialogue</a>

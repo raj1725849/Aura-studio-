@@ -105,7 +105,7 @@ export default function AdminPanel() {
       localStorage.setItem('isAdmin', 'true');
       setIsAdmin(true);
       setIsLoginOpen(false);
-      showToast('✦ Access Granted: Welcome back', 'success');
+      showToast('✦ Access Granted: Use "MANAGE PORTFOLIO" button at the top', 'success');
       window.dispatchEvent(new Event('storage'));
     } else {
       showToast('Security Breach Prevented', 'error');
@@ -200,15 +200,15 @@ export default function AdminPanel() {
         <motion.div 
           initial={{ y: -100 }}
           animate={{ y: 0 }}
-          className="fixed top-0 left-0 w-full h-[60px] bg-burgundy text-white z-[999] flex items-center justify-between px-10 shadow-lg"
+          className="fixed top-0 left-0 w-full h-[60px] bg-burgundy text-white z-[2000] flex items-center justify-between px-10 shadow-lg"
         >
           <div className="text-[12px] font-bold tracking-[3px] uppercase">✦ ADMIN MODE</div>
           <div className="flex items-center gap-6">
             <button 
               onClick={() => { setIsCmsOpen(true); setActiveTab('all'); }}
-              className="bg-white/10 border border-white/20 px-6 py-2 rounded-sm text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all font-bold"
+              className="bg-white/10 border border-white/20 px-6 py-2 rounded-sm text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all font-bold cursor-pointer"
             >
-              📁 ARCHIVE
+              📁 MANAGE PORTFOLIO
             </button>
             <button onClick={handleLogout} className="text-[10px] uppercase tracking-widest border border-white/40 text-white/70 px-4 py-2 rounded-sm hover:border-white hover:text-white transition-all font-bold flex items-center gap-2">
               <LogOut size={12} /> LOGOUT
@@ -290,18 +290,18 @@ export default function AdminPanel() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsCmsOpen(false)}
-              className="fixed inset-0 z-[1001] bg-stone-950/40 backdrop-blur-sm"
+              className="fixed inset-0 z-[2999] bg-stone-950/40 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 200 }}
-              className="fixed right-0 top-0 h-screen w-full lg:w-[600px] z-[1002] bg-[#0A0A0A] border-l border-burgundy flex flex-col p-12 overflow-y-auto"
+              className="cms-sidebar fixed right-0 top-0 h-screen w-full lg:w-[600px] z-[3000] bg-[#0A0A0A] border-l border-burgundy flex flex-col p-12 overflow-y-auto"
             >
               <div className="flex justify-between items-start mb-20">
                 <div>
-                  <h2 className="text-3xl font-serif text-white italic">PORTFOLIO MANAGER</h2>
+                  <h2 className="text-3xl font-serif text-white italic">PORTFOLIO MANAGEMENT</h2>
                   <p className="text-[11px] font-sans text-white/40 tracking-wider">Curation Panel v1.0.4</p>
                 </div>
                 <button onClick={() => setIsCmsOpen(false)} className="w-12 h-12 rounded-sm border border-white/20 flex items-center justify-center text-white hover:border-burgundy">
@@ -314,13 +314,13 @@ export default function AdminPanel() {
                   onClick={() => { setActiveTab('all'); setEditingProject(null); }}
                   className={`pb-4 text-[13px] uppercase tracking-widest transition-all ${activeTab === 'all' ? 'text-white border-b-2 border-burgundy' : 'text-white/40 border-b-2 border-transparent hover:text-white'}`}
                 >
-                  📋 Archive
+                  📁 Manage Collection
                 </button>
                 <button 
                   onClick={() => { setActiveTab('form'); setEditingProject(null); }}
                   className={`pb-4 text-[13px] uppercase tracking-widest transition-all ${activeTab === 'form' && !editingProject ? 'text-white border-b-2 border-burgundy' : 'text-white/40 border-b-2 border-transparent hover:text-white'}`}
                 >
-                  ➕ Add Project
+                  ➕ New Project
                 </button>
               </div>
 
@@ -333,44 +333,48 @@ export default function AdminPanel() {
                           <motion.div 
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="bg-burgundy/10 border border-burgundy/30 p-6 rounded-sm flex items-center justify-between"
+                            className="bg-burgundy/10 border border-burgundy/30 p-8 rounded-sm flex flex-col gap-6"
                           >
-                            <span className="text-white text-[13px]">Confirm Delete '{project.title}'?</span>
+                            <div className="flex items-center gap-4 text-white">
+                               <Trash2 className="text-burgundy" size={24} />
+                               <span className="text-[14px]">Are you sure you want to delete <strong className="text-burgundy">'{project.title}'</strong>? This project and its assets will be permanently removed from the public curate.</span>
+                            </div>
                             <div className="flex gap-4">
-                              <button onClick={() => deleteProject(project.id)} className="bg-burgundy px-4 py-2 text-[10px] uppercase tracking-widest font-bold cursor-pointer">Delete</button>
-                              <button onClick={() => setDeleteConfirm(null)} className="border border-white/20 px-4 py-2 text-[10px] uppercase tracking-widest font-bold cursor-pointer">Cancel</button>
+                              <button onClick={() => deleteProject(project.id)} className="bg-burgundy px-10 py-3 text-[10px] uppercase tracking-widest font-bold cursor-pointer hover:bg-white hover:text-stone-900 transition-all">Yes, Confirm Delete</button>
+                              <button onClick={() => setDeleteConfirm(null)} className="border border-white/20 px-8 py-3 text-[10px] uppercase tracking-widest font-bold cursor-pointer hover:bg-white/10 transition-all">Cancel</button>
                             </div>
                           </motion.div>
                         ) : (
-                          <div className="grid grid-cols-[80px_1fr_auto] gap-8 bg-white/[0.04] border border-white/[0.08] p-6 rounded-sm items-center hover:border-burgundy transition-all">
-                            <div className="w-20 h-16 bg-[#1a0a0a] rounded-sm overflow-hidden flex items-center justify-center">
+                          <div className="grid grid-cols-[100px_1fr_auto] gap-8 bg-white/[0.04] border border-white/[0.08] p-6 rounded-sm items-center hover:border-burgundy/60 transition-all">
+                            <div className="w-[100px] h-[100px] bg-[#1a0a0a] rounded-sm overflow-hidden flex items-center justify-center border border-white/5">
                               {project.images.cover ? (
                                 <img src={project.images.cover} className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[10px] text-white/20">NO IMG</div>
+                                <ImageIcon size={30} strokeWidth={1} className="text-white/10" />
                               )}
                             </div>
                             <div>
-                                <h4 className="text-white text-[15px] font-bold tracking-tight mb-1">{project.title}</h4>
+                                <h4 className="text-white text-[16px] font-bold tracking-tight mb-1">{project.title}</h4>
+                                <p className="text-white/40 text-[12px] line-clamp-1 mb-3">{project.description}</p>
                                 <div className="flex items-center gap-3">
-                                  <span className="text-burgundy text-[10px] uppercase font-bold tracking-widest">{project.roomType}</span>
-                                  <span className={`px-2 py-0.5 rounded-sm text-[8px] uppercase font-bold tracking-widest ${project.status === 'published' ? 'bg-burgundy text-white' : 'bg-white/10 text-white/40'}`}>
-                                    {project.status}
-                                  </span>
+                                  <span className="text-burgundy text-[9px] uppercase font-bold tracking-widest border border-burgundy/30 px-2 py-0.5">{project.roomType}</span>
+                                  <span className="text-stone-500 text-[9px] uppercase font-bold tracking-widest bg-white/5 px-2 py-0.5">{project.city}</span>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-col gap-2">
                                 <button 
                                   onClick={() => { setEditingProject(project); setActiveTab('form'); }}
-                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all cursor-pointer"
+                                  className="h-10 w-10 flex items-center justify-center rounded-sm text-white/40 border border-white/15 hover:bg-burgundy hover:text-white transition-all cursor-pointer"
+                                  title="Edit Narrative & Data"
                                 >
-                                  Edit
+                                  <Edit2 size={16} />
                                 </button>
                                 <button 
                                   onClick={() => setDeleteConfirm(project.id)}
-                                  className="h-10 px-4 text-[10px] uppercase font-bold border border-white/15 hover:bg-burgundy transition-all cursor-pointer"
+                                  className="h-10 w-10 flex items-center justify-center rounded-sm text-white/40 border border-white/15 hover:bg-stone-800 hover:text-burgundy transition-all cursor-pointer"
+                                  title="Destroy Record"
                                 >
-                                  🗑
+                                  <Trash2 size={16} />
                                 </button>
                             </div>
                           </div>
@@ -378,9 +382,10 @@ export default function AdminPanel() {
                       </div>
                     ))
                   ) : (
-                    <div className="text-center py-20">
-                      <p className="text-white/40 text-[13px] uppercase tracking-[2px]">No curated works recorded.</p>
-                      <button onClick={() => setActiveTab('form')} className="mt-4 text-burgundy font-bold text-[13px] cursor-pointer">+ CREATE RECORD →</button>
+                    <div className="text-center py-32 border border-dashed border-white/10 rounded-lg">
+                      <Grid className="mx-auto text-white/10 mb-6" size={48} strokeWidth={1} />
+                      <p className="text-white/40 text-[13px] uppercase tracking-[2px]">Your portfolio archive is currently empty.</p>
+                      <button onClick={() => setActiveTab('form')} className="mt-6 text-burgundy font-bold text-[13px] cursor-pointer hover:tracking-[3px] transition-all">✦ CURATE NEW WORK</button>
                     </div>
                   )}
                 </div>
@@ -388,23 +393,26 @@ export default function AdminPanel() {
                 <form onSubmit={saveProject} className="flex-1 space-y-12 pb-20">
                    <div className="space-y-10">
                      <div className="space-y-4">
-                       <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Project Title *</label>
+                       <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold flex items-center gap-2">
+                         <span className="w-1.5 h-1.5 rounded-full bg-burgundy" /> 
+                         Project Title *
+                       </label>
                        <input 
                          name="title" 
                          defaultValue={editingProject?.title}
                          required 
-                         className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                         className="w-full bg-transparent border-b border-white/10 hover:border-white/30 py-4 text-white text-2xl font-serif italic outline-none focus:border-burgundy transition-colors"
                          placeholder="e.g. The Ethereal Twilight Lounge"
                        />
                      </div>
 
                      <div className="grid grid-cols-2 gap-10">
                        <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Room Category *</label>
+                         <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Room Category *</label>
                          <select 
                            name="roomType"
                            defaultValue={editingProject?.roomType || 'Living Room'}
-                           className="w-full bg-[#0A0A0A] border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy cursor-pointer"
+                           className="w-full bg-[#0A0A0A] border-b border-white/10 py-4 text-white text-[15px] outline-none focus:border-burgundy cursor-pointer transition-colors"
                          >
                            <option>Living Room</option>
                            <option>Master Bedroom</option>
@@ -416,123 +424,118 @@ export default function AdminPanel() {
                          </select>
                        </div>
                        <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Location *</label>
+                         <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Location *</label>
                          <input 
                            name="city" 
                            defaultValue={editingProject?.city}
                            required 
-                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
+                           className="w-full bg-transparent border-b border-white/10 py-4 text-white text-[15px] outline-none focus:border-burgundy transition-colors"
                            placeholder="e.g. Mumbai, Bengaluru"
                          />
                        </div>
                      </div>
 
-                     <div className="grid grid-cols-2 gap-10">
-                       <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Design Style</label>
-                         <input 
-                           name="style" 
-                           defaultValue={editingProject?.style}
-                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
-                           placeholder="e.g. Japandi, Modern Classy"
-                         />
-                       </div>
-                       <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Completion Time</label>
-                         <input 
-                           name="completionTime" 
-                           defaultValue={editingProject?.completionTime}
-                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
-                           placeholder="e.g. 60 Days"
-                         />
-                       </div>
-                     </div>
-
-                     <div className="grid grid-cols-2 gap-10">
-                       <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Budget Range</label>
-                         <select 
-                           name="budgetRange"
-                           defaultValue={editingProject?.budgetRange || 'Premium'}
-                           className="w-full bg-[#0A0A0A] border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy cursor-pointer"
-                         >
-                            <option>Under ₹5L</option>
-                            <option>₹5L – ₹15L</option>
-                            <option>Above ₹15L</option>
-                            <option>Premium Curation</option>
-                         </select>
-                       </div>
-                       <div className="space-y-4">
-                         <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Display Order</label>
-                         <input 
-                           type="number"
-                           name="displayOrder" 
-                           defaultValue={editingProject?.displayOrder || 1}
-                           className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy"
-                         />
-                       </div>
-                     </div>
-
                      <div className="space-y-4">
-                       <label className="text-[11px] uppercase tracking-[2px] text-burgundy font-bold">Curation Narrative *</label>
+                       <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Project Narrative (Description) *</label>
                        <textarea 
                          name="description" 
                          defaultValue={editingProject?.description}
                          required 
-                         rows={4}
-                         className="w-full bg-transparent border-b border-white/20 py-4 text-white text-lg outline-none focus:border-burgundy resize-none"
-                         placeholder="The story behind this design..."
+                         rows={6}
+                         className="w-full bg-white/[0.03] border border-white/10 p-6 text-white text-[15px] font-sans leading-relaxed outline-none focus:border-burgundy transition-colors resize-none rounded-sm"
+                         placeholder="Craft the story behind this design..."
                        />
                      </div>
 
-                     <div className="space-y-8 border-t border-white/10 pt-10">
-                        <h4 className="text-white text-[15px] italic font-serif">Visual Assets (Image URLs)</h4>
+                     <div className="space-y-10 border-t border-white/10 pt-16">
+                        <div>
+                           <h4 className="text-white text-xl font-serif italic mb-2 tracking-tight">Portfolio Visuals</h4>
+                           <p className="text-[11px] text-white/30 uppercase tracking-[2px]">Assign high-resolution perspective shots</p>
+                        </div>
                         
-                        <div className="grid grid-cols-2 gap-10">
-                           <div className="space-y-4">
-                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Cover Image URL</label>
-                             <input 
-                               name="img_cover" 
-                               defaultValue={editingProject?.images.cover}
-                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
-                             />
-                           </div>
-                           <div className="space-y-4">
-                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 1 URL</label>
-                             <input 
-                               name="img_detail1" 
-                               defaultValue={editingProject?.images.detail1}
-                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
-                             />
-                           </div>
+                        <div className="grid grid-cols-2 gap-8">
+                           {[
+                             { id: 'cover', label: 'Primary Cover Image' },
+                             { id: 'detail1', label: 'Perspective Detail I' },
+                             { id: 'detail2', label: 'Perspective Detail II' },
+                             { id: 'detail3', label: 'Perspective Detail III' }
+                           ].map((slot) => (
+                             <div key={slot.id} className="space-y-4 group">
+                               <label className="text-[10px] uppercase tracking-[2px] text-stone-500 font-bold">{slot.label}</label>
+                               <div className="relative aspect-video bg-white/[0.02] border border-dashed border-white/10 group-hover:border-burgundy/50 transition-colors flex items-center justify-center overflow-hidden rounded-sm">
+                                  {(() => {
+                                    const currentUrl = (editingProject?.images as any)?.[slot.id];
+                                    return currentUrl ? (
+                                      <img id={`preview-${slot.id}`} src={currentUrl} className="w-full h-full object-cover" />
+                                    ) : (
+                                      <Camera size={24} className="text-white/5" />
+                                    );
+                                  })()}
+                                  <div className="absolute inset-0 bg-stone-900/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                                     <button 
+                                       type="button"
+                                       onClick={() => {
+                                         const input = document.createElement('input');
+                                         input.type = 'file';
+                                         input.accept = 'image/*';
+                                         input.onchange = (e: any) => {
+                                           const file = e.target.files[0];
+                                           if(file) {
+                                             const reader = new FileReader();
+                                             reader.onload = (re: any) => {
+                                                const urlField = document.querySelector(`input[name="img_${slot.id}"]`) as HTMLInputElement;
+                                                const previewImg = document.getElementById(`preview-${slot.id}`) as HTMLImageElement;
+                                                if(urlField) urlField.value = re.target.result;
+                                                if(previewImg) previewImg.src = re.target.result;
+                                                else {
+                                                   // Handle creating placeholder if it didn't exist
+                                                    const parent = document.getElementById(`preview-${slot.id}`)?.parentElement;
+                                                    if(parent) parent.innerHTML = `<img id="preview-${slot.id}" src="${re.target.result}" class="w-full h-full object-cover" />`;
+                                                }
+                                             };
+                                             reader.readAsDataURL(file);
+                                           }
+                                         };
+                                         input.click();
+                                       }}
+                                       className="bg-burgundy text-white px-4 py-2 text-[9px] font-bold uppercase tracking-widest cursor-pointer"
+                                     >
+                                       Upload Media
+                                     </button>
+                                  </div>
+                               </div>
+                               <input 
+                                 name={`img_${slot.id}`} 
+                                 defaultValue={(editingProject?.images as any)?.[slot.id]}
+                                 className="w-full bg-transparent border-b border-white/5 py-2 text-white/40 text-[11px] outline-none focus:border-burgundy transition-colors"
+                                 placeholder="Or paste asset URL here..."
+                               />
+                             </div>
+                           ))}
                         </div>
+                     </div>
 
-                        <div className="grid grid-cols-2 gap-10">
-                           <div className="space-y-4">
-                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 2 URL</label>
-                             <input 
-                               name="img_detail2" 
-                               defaultValue={editingProject?.images.detail2}
-                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
-                             />
-                           </div>
-                           <div className="space-y-4">
-                             <label className="text-[10px] uppercase tracking-[2px] text-white/30 font-bold">Detail 3 URL</label>
-                             <input 
-                               name="img_detail3" 
-                               defaultValue={editingProject?.images.detail3}
-                               className="w-full bg-transparent border-b border-white/10 py-3 text-white text-sm outline-none focus:border-burgundy"
-                             />
-                           </div>
+                     <div className="grid grid-cols-3 gap-6 pt-10">
+                        <div className="space-y-4">
+                           <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Style Preference</label>
+                           <input name="style" defaultValue={editingProject?.style} className="w-full bg-transparent border-b border-white/10 py-4 text-white outline-none focus:border-burgundy" placeholder="Japandi, etc." />
                         </div>
-
-                        <p className="text-[10px] text-white/20 italic">✦ Pro Tip: You can also update images by clicking on them directly in the Portfolio page while in Admin Mode.</p>
+                        <div className="space-y-4">
+                           <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Delivery Timeline</label>
+                           <input name="completionTime" defaultValue={editingProject?.completionTime} className="w-full bg-transparent border-b border-white/10 py-4 text-white outline-none focus:border-burgundy" placeholder="60 Days" />
+                        </div>
+                        <div className="space-y-4">
+                           <label className="text-[11px] uppercase tracking-[2px] text-stone-500 font-bold">Display Order</label>
+                           <input type="number" name="displayOrder" defaultValue={editingProject?.displayOrder || 1} className="w-full bg-transparent border-b border-white/10 py-4 text-white outline-none focus:border-burgundy" />
+                        </div>
                      </div>
                    </div>
 
-                   <div className="pt-10 flex gap-6">
-                     <button type="submit" className="flex-1 bg-burgundy text-white py-5 uppercase text-[12px] font-bold tracking-[3px] hover:bg-white hover:text-stone-900 transition-all cursor-pointer">✦ COMMIT CHANGES</button>
-                     <button type="button" onClick={() => setActiveTab('all')} className="px-10 border border-white/20 text-white/40 uppercase text-[10px] font-bold tracking-[2px] cursor-pointer">Discard</button>
+                   <div className="pt-16 flex gap-6 sticky bottom-0 bg-[#0A0A0A] py-6 z-10 border-t border-white/5">
+                     <button type="submit" className="flex-1 bg-burgundy text-white py-6 uppercase text-[13px] font-bold tracking-[4px] hover:bg-white hover:text-stone-900 transition-all cursor-pointer shadow-2xl">
+                       ✦ {editingProject ? 'UPDATE CURATE ENTRY' : 'COMMIT TO ARCHIVE'}
+                     </button>
+                     <button type="button" onClick={() => { setActiveTab('all'); setEditingProject(null); }} className="px-10 border border-white/10 text-white/30 uppercase text-[10px] font-bold tracking-[2px] cursor-pointer hover:text-white transition-colors">Discard</button>
                    </div>
                 </form>
               )}
@@ -544,7 +547,7 @@ export default function AdminPanel() {
       {/* Image Manager Modal */}
       <AnimatePresence>
         {isImageManagerOpen && imageSlot && (
-          <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-sm p-8">
+          <div className="fixed inset-0 z-[4000] flex items-center justify-center bg-black/95 backdrop-blur-sm p-8">
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
